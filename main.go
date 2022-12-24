@@ -8,6 +8,8 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type Movie struct {
@@ -32,6 +34,10 @@ func main() {
 	r.HandleFunc("/movies", createMovie).Methods("POST")
 	r.HandleFunc("/movies/{id}", updateMovie).Methods("PUT")
 	r.HandleFunc("/movies/{id}", deleteMovie).Methods("DELETE")
+
+	// metrices
+
+	r.Handle("/metrices",promhttp.Handler())
 
 	fmt.Printf("Server is starting:\n")
 	err := http.ListenAndServe(":8000", r)
